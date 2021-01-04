@@ -1,0 +1,44 @@
+{
+  "name": "MSBuild",
+  "type": "executer",
+  "execProgram": "node",
+  "main": "app.js",
+  "imgUrl": "logo.png",
+  "version": "0.0.1",
+  "description": "MSBuild build and publish",
+  "methods": [
+    {
+      "name": "build",
+      "viewName": "Build",
+      "params": [
+        {
+          "name": "PATH",
+          "viewName": "Path to .sln",
+          "type": "string"
+        },
+        {
+          "name": "CONFIG",
+          "viewName": "Config",
+          "type": "string"
+        }
+      ]
+    },
+	    {
+      "name": "publish",
+      "viewName": "Publish",
+      "params": [
+        {
+          "name": "PATHPROJ",
+          "viewName": "Path to .sln\\.proj",
+          "type": "string"
+        },
+        {
+          "name": "PROFILE",
+          "viewName": "Profile",
+          "type": "string"
+        }
+      ]
+    }
+
+    ]
+  }
