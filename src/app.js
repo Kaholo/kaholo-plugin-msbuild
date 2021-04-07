@@ -1,55 +1,45 @@
-var _msbuild = require('msbuild');
+const { getAndConfigMsBuild } = require("./helpers");
 
-function build(action) {
+async function build(action, settings, target) {
+    const config = (action.params.CONFIG || "").trim();
+    const path = (action.params.PATHPROJ || "").trim();
     return new Promise((resolve,reject) => {
-        var msbuild = new _msbuild();
-        let path = action.params.PATH;
-        let config = action.params.CONFIG;
-        msbuild.configuration = config;
-        msbuild.sourcePath = path;
-
-        msbuild.on('error',function(err,results){
-            reject ({err : err, status:"failure"})
-        });
-
-        msbuild.on('done',function(err,results){
-            if (err) return reject ({err : err, status:"failure"});
-
-            resolve ({
-                status : "success"
-            })
-        });
-
+        var msbuild = getAndConfigMsBuild(resolve, reject, settings, path);
+        if (config) {
+            msbuild.configuration = config;
+        }
+        if (target){
+            const overrideParams = [`/t:${target}`];
+            msbuild.config('overrideParams', overrideParams);
+        }
         msbuild.build();
-    })
+    });
 }
 
-function publish(action) {
+async function publish(action, settings) {
+    const profile = (action.params.PROFILE || "").trim();
+    const path = (action.params.PATHPROJ || "").trim();
     return new Promise((resolve,reject) => {
-        var msbuild = new _msbuild();
-        let path = action.params.PATHPROJ;
-        let profile = action.params.PROFILE;
-        msbuild.publishProfile = profile;
-        msbuild.sourcePath = path;
-
-
-        msbuild.on('error',function(err,results){
-            reject ({err : err, status:"failure"})
-        });
-
-        msbuild.on('done',function(err,results){
-            if (err) return reject ({err : err, status:"failure"});
-
-            resolve ({
-                status : "success"
-            })
-        });
-
+        var msbuild = getAndConfigMsBuild(resolve, reject, settings, path);
+        if (profile) {
+            msbuild.publishProfile = profile;
+        }
+        
         msbuild.publish();
-    })
+    });
+}
+
+async function restore(action, settings) {
+    return build(action, settings, "Restore");
+}
+
+async function rebuild(action, settings) {
+    return build(action, settings, "Rebuild");
 }
 
 module.exports = {
-    build: build,
-    publish: publish
+    build,
+    publish,
+    restore,
+    rebuild
 }
