@@ -4,8 +4,20 @@
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
-  "version": "0.0.1",
-  "description": "MSBuild build and publish",
+  "version": "1.1.0",
+  "description": "execute MSBuild commands",
+  "settings": [
+    {
+      "name": "version",
+      "viewName": "Tools Version",
+      "type": "string"
+    },
+    {
+      "name": "exePath",
+      "viewName": "MSBuild EXE Path",
+      "type": "string"
+    }
+  ],
   "methods": [
     {
       "name": "build",
@@ -23,7 +35,7 @@
         }
       ]
     },
-	    {
+	  {
       "name": "publish",
       "viewName": "Publish",
       "params": [
@@ -38,7 +50,33 @@
           "type": "string"
         }
       ]
+    },
+	  {
+      "name": "restore",
+      "viewName": "Restore",
+      "params": [
+        {
+          "name": "PATHPROJ",
+          "viewName": "Path to .sln",
+          "type": "string"
+        }
+      ]
+    },
+	  {
+      "name": "rebuild",
+      "viewName": "Rebuild",
+      "params": [
+        {
+          "name": "PATHPROJ",
+          "viewName": "Path to .sln",
+          "type": "string"
+        },
+        {
+          "name": "CONFIG",
+          "viewName": "Config",
+          "type": "string"
+        }
+      ]
     }
-
-    ]
-  }
+  ]
+}
