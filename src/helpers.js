@@ -55,7 +55,7 @@ function genNewExec(sourcePath){
             }		
             cb();
         }
-        return spawn(exe, params, { stdio: 'inherit', cwd: cwd }).on('close', onClose );
+        return spawn(exe, params, { cwd: cwd }).on('close', onClose );
     }
 }
 

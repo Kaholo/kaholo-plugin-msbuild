@@ -2,7 +2,8 @@
 MSBuild plugin for Kaholo.
 
 ## Settings
-1. Tools Version - the tools version to run commands with. determines local path to msbuild.exe.
+1. Tools Version (String) **Optional** - The tools version to run commands with. determines local path to msbuild.exe.
+2. MSBuild EXE Path (String) **Required** - Explicit path to MSBuild.exe to run the commands with. Overrides path determined from tools version parameter. 
 
 ## Method: Build
 Build solution.
