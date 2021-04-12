@@ -4,7 +4,7 @@
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "execute MSBuild commands",
   "settings": [
     {
