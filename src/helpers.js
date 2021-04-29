@@ -11,26 +11,15 @@ function getAndConfigMsBuild(resolve, reject, settings, sourcePath) {
 
     // config msbuild exec to run from the directory of the sourcePath
     msbuild.exec = genNewExec(sourcePath); 
-
-    msbuild.on('error',function(err, results){
-        reject ({err : err, status:"failure"})
-    });
-
-    msbuild.on('done',function(err, results){
-        if (err) return reject ({err : err, status:"failure"});
-
-        resolve ({
-            status : "success"
-        });
-    });
-
-    if (settings.version){
-        msbuild.config('version', settings.version);
-    }
-    else if (settings.exePath) {
+    msbuild.on('error', (err) => reject({status: "failure", err: err}));
+    msbuild.on('done', () => resolve({status : "success"}));
+    
+    if (settings.exePath) {
         msbuild.buildexe = () => settings.exePath;
     }
-
+    else if (settings.version){
+        msbuild.config('version', settings.version);
+    }
     return msbuild;
 }
 
@@ -39,23 +28,13 @@ function genNewExec(sourcePath){
         var self = this;
         const cwd = path.dirname(sourcePath);
         function onClose(code) {
-            var msg = '';
-            if (code === 0) {
-                msg = msg+('\n finished - (0) errors'.white.greenBG);
-                self.emit('done',null,msg);
+            if (code !== 0) {
+                return self.emit('error',code,"");;
             }
-            else {
-                msg = ('\n error code: ' + code).grey+('\n failed - errors'.white.redBG);
-                msg += '\n'+exe; 
-                if(params !== undefined && typeof params === 'array'){
-                    params.forEach(function(p){msg += ' ' + p; }); 
-                }
-                self.emit('error',code,msg);
-                return;
-            }		
+            self.emit('done', null, "");	
             cb();
         }
-        return spawn(exe, params, { cwd: cwd }).on('close', onClose );
+        return spawn(exe, params, { stdio: 'inherit', cwd: cwd }).on('close', onClose );
     }
 }
 
